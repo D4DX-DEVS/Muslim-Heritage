@@ -1,0 +1,7 @@
+# Local secrets for `next dev` / `npm run preview` (copy to .dev.vars; never commit .dev.vars).
+# Production: set each with `npx wrangler secret put <NAME>`.
+ADMIN_USERNAME=admin
+# node scripts/hash-password.mts '<your password>'
+ADMIN_PASSWORD_HASH=
+# 32+ random characters, e.g. node -e "console.log(crypto.randomBytes(48).toString('base64url'))"
+SESSION_SECRET=

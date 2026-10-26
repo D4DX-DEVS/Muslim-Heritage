@@ -1,0 +1,49 @@
+{
+  "mode": "remote",
+  "force": false,
+  "startedAt": "2026-10-26T12:38:55.961Z",
+  "media": {
+    "uploaded": 266,
+    "unchangedInR2": 0,
+    "rows": 266
+  },
+  "leadImagesLiftedFromBody": 145,
+  "verification": {
+    "source": {
+      "articles": 145,
+      "authors": 141,
+      "sections": 23,
+      "boardMembers": 84,
+      "media": 266
+    },
+    "database": {
+      "articles": 145,
+      "publishedArticles": 145,
+      "authors": 141,
+      "sections": 23,
+      "boardMembers": 84,
+      "media": 266,
+      "articleAuthorLinks": 144,
+      "searchIndexRows": 145
+    },
+    "articlesWithoutAuthor": [
+      7
+    ],
+    "articlesWithoutSection": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "emptyBodies": 0,
+    "inlineImagesReferenced": 0,
+    "inlineImagesWithoutMediaRow": [],
+    "mediaRowsMissingInR2": [],
+    "replacementCharacters": 0,
+    "problems": []
+  },
+  "finishedAt": "2026-10-26T12:45:54.590Z"
+}

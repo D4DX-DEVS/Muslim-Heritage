@@ -1,26 +1,248 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* ------------------------------------------------------------------
+   Design tokens. Palette is taken from the foundation's emblem:
+   deep heritage green, leaf green, conference-banner gold, on ivory.
+   ------------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --heritage-950: #06221a;
+  --heritage-900: #0b2e22;
+  --heritage-800: #103d2d;
+  --heritage-700: #175239;
+  --heritage-600: #1f6b49;
+  --heritage-100: #e3eee6;
+  --leaf: #8cc63f;
+  --gold-700: #8a6418;
+  --gold-600: #a87b22;
+  --gold-500: #c39633;
+  --gold-200: #ecdcae;
+  --ivory: #faf6ec;
+  --paper: #fffdf8;
+  --line: #e4dccb;
+  --ink: #1d211c;
+  --ink-soft: #4f554b;
+
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--heritage-800);
+  --primary-foreground: #fdfbf4;
+  --secondary: #f1ead9;
+  --secondary-foreground: var(--heritage-900);
+  --muted: #f1ecdf;
+  --muted-foreground: var(--ink-soft);
+  --accent: #efe6cf;
+  --accent-foreground: var(--heritage-900);
+  --destructive: #b42318;
+  --border: var(--line);
+  --input: #d9d0bb;
+  --ring: var(--gold-600);
+  --radius: 0.5rem;
+
+  --sidebar: var(--heritage-900);
+  --sidebar-foreground: #e9efe9;
+  --sidebar-primary: var(--gold-500);
+  --sidebar-primary-foreground: var(--heritage-950);
+  --sidebar-accent: var(--heritage-800);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 0.08);
+  --sidebar-ring: var(--gold-500);
+
+  --chart-1: var(--heritage-700);
+  --chart-2: var(--gold-500);
+  --chart-3: var(--leaf);
+  --chart-4: var(--heritage-600);
+  --chart-5: var(--gold-700);
+
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --color-heritage-950: var(--heritage-950);
+  --color-heritage-900: var(--heritage-900);
+  --color-heritage-800: var(--heritage-800);
+  --color-heritage-700: var(--heritage-700);
+  --color-heritage-600: var(--heritage-600);
+  --color-heritage-100: var(--heritage-100);
+  --color-leaf: var(--leaf);
+  --color-gold-700: var(--gold-700);
+  --color-gold-600: var(--gold-600);
+  --color-gold-500: var(--gold-500);
+  --color-gold-200: var(--gold-200);
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+
+  /* Latin glyphs come from Poppins/Inter, Malayalam glyphs fall through per-glyph
+     to Anek Malayalam / Noto Sans Malayalam. */
+  --font-sans: var(--font-inter), var(--font-noto-ml), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-poppins), var(--font-anek-ml), var(--font-noto-ml), ui-sans-serif, sans-serif;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+
+  --container-prose: 44rem;
+  --container-page: 76rem;
+
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+  @keyframes shimmer {
+    0% { background-position: -150% 0; }
+    100% { background-position: 250% 0; }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    line-height: 1.7;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    text-wrap: balance;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+  }
+  button:not(:disabled), [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--gold-600);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--gold-200);
+    color: var(--heritage-950);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Article body. Legacy content: <p>, <br>, <strong>, <sup> footnotes,
+   <h5> sub-heads and <address> used for verse lines.
+   ------------------------------------------------------------------ */
+@layer components {
+  .prose-heritage {
+    font-size: 1.0625rem;
+    line-height: 1.95;
+    color: var(--ink);
+    overflow-wrap: break-word;
+  }
+  @media (min-width: 640px) {
+    .prose-heritage { font-size: 1.125rem; }
+  }
+  .prose-heritage > * + * { margin-top: 1.15em; }
+  .prose-heritage p { text-align: start; }
+  .prose-heritage h2,
+  .prose-heritage h3,
+  .prose-heritage h4,
+  .prose-heritage h5,
+  .prose-heritage h6 {
+    color: var(--heritage-900);
+    font-weight: 600;
+    margin-top: 2em;
+    scroll-margin-top: 6rem;
+  }
+  .prose-heritage h2 { font-size: 1.45em; }
+  .prose-heritage h3 { font-size: 1.3em; }
+  .prose-heritage h4, .prose-heritage h5, .prose-heritage h6 { font-size: 1.12em; }
+  .prose-heritage strong, .prose-heritage b { font-weight: 650; color: var(--heritage-950); }
+  .prose-heritage a { color: var(--heritage-700); text-decoration: underline; text-underline-offset: 3px; }
+  .prose-heritage a:hover { color: var(--gold-700); }
+  .prose-heritage sup { font-size: 0.7em; line-height: 0; color: var(--gold-700); }
+  .prose-heritage img { max-width: 100%; height: auto; border-radius: var(--radius-md); margin-inline: auto; }
+  .prose-heritage blockquote {
+    border-inline-start: 3px solid var(--gold-500);
+    padding-inline-start: 1.1em;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .prose-heritage address {
+    font-style: normal;
+    padding-inline-start: 1.1em;
+    border-inline-start: 2px solid var(--gold-200);
+    color: var(--heritage-800);
+    margin-top: 0;
+  }
+  .prose-heritage p + address, .prose-heritage address:first-child { margin-top: 1.15em; padding-top: 0.25em; }
+  .prose-heritage ul { list-style: disc; padding-inline-start: 1.4em; }
+  .prose-heritage ol { list-style: decimal; padding-inline-start: 1.4em; }
+  .prose-heritage table { display: block; overflow-x: auto; max-width: 100%; border-collapse: collapse; }
+  .prose-heritage th, .prose-heritage td { border: 1px solid var(--line); padding: 0.4em 0.7em; }
+  .prose-heritage hr { border-color: var(--line); }
+
+  .skeleton-shimmer {
+    background-color: var(--muted);
+    background-image: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 0.65) 50%, transparent 100%);
+    background-size: 60% 100%;
+    background-repeat: no-repeat;
+    animation: var(--animate-shimmer);
+  }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .prose-heritage { font-size: 12pt; line-height: 1.7; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
 }

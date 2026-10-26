@@ -1,0 +1,35 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "muslim-heritage",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "muslim-heritage" }],
+  "observability": { "enabled": true },
+  "vars": {
+    "SITE_URL": "https://www.muslimheritage.in",
+    // "true" only on the production deployment; anything else sends noindex.
+    "ALLOW_INDEXING": "false",
+    // Public CDN origin of the R2 bucket (custom domain such as https://media.muslimheritage.in).
+    // Empty = media is served by this Worker at /uploads/... and cached at the edge.
+    "MEDIA_BASE_URL": ""
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "islam-heritage",
+      "database_id": "b3f52577-e936-4855-8bb6-70be5e0551d8",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "islam-heritage"
+    }
+  ]
+}
