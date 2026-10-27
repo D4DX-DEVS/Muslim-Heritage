@@ -22,7 +22,9 @@
     "migrate:media": "python -I -X utf8 scripts/migration/download_media.py migration/data migration/media",
     "migrate:import": "node scripts/migration/import.mts",
     "migrate:import:remote": "node --env-file=.env scripts/migration/import.mts --remote",
-    "hash-password": "node scripts/hash-password.mts"
+    "hash-password": "node scripts/hash-password.mts",
+    "media:webp": "node scripts/media/to-webp.mts",
+    "media:webp:remote": "node --env-file=.env scripts/media/to-webp.mts --remote"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -54,6 +56,7 @@
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^5.0.5",

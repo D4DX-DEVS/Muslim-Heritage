@@ -13,7 +13,7 @@ export default async function LoginPage() {
     <main className="flex min-h-dvh items-center justify-center bg-heritage-900 px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex justify-center">
-          <Image src="/images/logo.png" alt={SITE.name} width={372} height={89} priority className="h-12 w-auto" />
+          <Image src="/images/logo.webp" alt={SITE.name} width={372} height={89} priority className="h-12 w-auto" />
         </div>
         <div className="rounded-xl bg-paper p-6 shadow-2xl sm:p-8">
           <h1 className="font-heading text-xl font-bold text-heritage-900">Admin sign in</h1>

@@ -54,22 +54,33 @@ function toMediaRef(m: typeof media.$inferSelect | null | undefined, fallbackAlt
   };
 }
 
+// D1 allows at most 100 bound parameters per query, so long id lists are queried in batches.
+const BATCH = 90;
+
+async function inBatches<T>(ids: number[], query: (batch: number[]) => Promise<T[]>): Promise<T[]> {
+  const out: T[] = [];
+  for (let i = 0; i < ids.length; i += BATCH) out.push(...(await query(ids.slice(i, i + BATCH))));
+  return out;
+}
+
 async function mediaMap(ids: (number | null)[]): Promise<Map<number, typeof media.$inferSelect>> {
   const unique = [...new Set(ids.filter((x): x is number => x != null))];
   if (unique.length === 0) return new Map();
-  const rows = await getDb().select().from(media).where(inArray(media.id, unique));
+  const rows = await inBatches(unique, (batch) => getDb().select().from(media).where(inArray(media.id, batch)));
   return new Map(rows.map((r) => [r.id, r]));
 }
 
 async function authorsFor(articleIds: number[]): Promise<Map<number, AuthorRef[]>> {
   const result = new Map<number, AuthorRef[]>();
   if (articleIds.length === 0) return result;
-  const rows = await getDb()
-    .select({ articleId: articleAuthors.articleId, author: authors })
-    .from(articleAuthors)
-    .innerJoin(authors, eq(authors.id, articleAuthors.authorId))
-    .where(inArray(articleAuthors.articleId, articleIds))
-    .orderBy(asc(articleAuthors.position));
+  const rows = await inBatches(articleIds, (batch) =>
+    getDb()
+      .select({ articleId: articleAuthors.articleId, author: authors })
+      .from(articleAuthors)
+      .innerJoin(authors, eq(authors.id, articleAuthors.authorId))
+      .where(inArray(articleAuthors.articleId, batch))
+      .orderBy(asc(articleAuthors.position)),
+  );
   const photos = await mediaMap(rows.map((r) => r.author.photoId));
   for (const { articleId, author } of rows) {
     const list = result.get(articleId) ?? [];
@@ -257,6 +268,34 @@ export async function listSections(): Promise<SectionSummary[]> {
   }));
 }
 
+export interface ContentsSection {
+  id: number;
+  title: string;
+  articles: { id: number; title: string; authors: string }[];
+}
+
+/** The proceedings' table of contents: every section with its published papers, in volume order. */
+export async function contentsBySection(): Promise<ContentsSection[]> {
+  const db = getDb();
+  const [sectionRows, articleRows] = await Promise.all([
+    db.select({ id: sections.id, title: sections.title }).from(sections).orderBy(asc(sections.sortOrder), asc(sections.id)),
+    db
+      .select({ id: articles.id, title: articles.title, sectionId: articles.sectionId })
+      .from(articles)
+      .where(and(published, isNotNull(articles.sectionId)))
+      .orderBy(asc(articles.sortOrder), asc(articles.id)),
+  ]);
+  const authorMap = await authorsFor(articleRows.map((a) => a.id));
+  return sectionRows
+    .map((s) => ({
+      ...s,
+      articles: articleRows
+        .filter((a) => a.sectionId === s.id)
+        .map((a) => ({ id: a.id, title: a.title, authors: (authorMap.get(a.id) ?? []).map((x) => x.name).join(", ") })),
+    }))
+    .filter((s) => s.articles.length > 0);
+}
+
 export async function getSection(id: number): Promise<SectionSummary | null> {
   return (await listSections()).find((s) => s.id === id) ?? null;
 }
@@ -326,25 +365,30 @@ export async function getAuthor(id: number): Promise<{ author: AuthorSummary; ar
 }
 
 /** Authors with the most published papers, for the homepage. */
-export async function prolificAuthors(limit: number): Promise<AuthorSummary[]> {
-  const db = getDb();
-  const rows = await db
-    .select({ author: authors, articleCount: count(articles.id) })
+export interface ShelfAuthor {
+  id: number;
+  name: string;
+  section: { id: number; title: string };
+}
+
+/** Authors with the section of their first published paper, most prolific first. */
+export async function shelfAuthors(limit: number): Promise<ShelfAuthor[]> {
+  const rows = await getDb()
+    .select({
+      id: authors.id,
+      name: authors.name,
+      sectionId: sql<number>`min(${sections.id})`,
+      sectionTitle: sql<string>`min(${sections.title})`,
+      papers: count(articles.id),
+    })
     .from(authors)
     .innerJoin(articleAuthors, eq(articleAuthors.authorId, authors.id))
     .innerJoin(articles, and(eq(articles.id, articleAuthors.articleId), published))
+    .innerJoin(sections, eq(sections.id, articles.sectionId))
     .groupBy(authors.id)
     .orderBy(desc(count(articles.id)), asc(authors.id))
     .limit(limit);
-  const photos = await mediaMap(rows.map((r) => r.author.photoId));
-  return rows.map(({ author, articleCount }) => ({
-    id: author.id,
-    name: author.name,
-    designation: author.designation,
-    bio: author.bio,
-    articleCount,
-    photo: toMediaRef(photos.get(author.photoId ?? -1), author.name),
-  }));
+  return rows.map((r) => ({ id: r.id, name: r.name, section: { id: r.sectionId, title: r.sectionTitle } }));
 }
 
 // ------------------------------------------------------------------ conference, boards, pages

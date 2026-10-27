@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toWebp } from "@/lib/admin/to-webp";
 
 export interface MediaItem {
   id: number;
@@ -18,8 +19,9 @@ export interface MediaItem {
   height: number | null;
 }
 
-/** Uploads one file with progress; resolves to the stored item or throws a readable error. */
-export function uploadFile(file: File, onProgress: (pct: number) => void): Promise<MediaItem> {
+/** Converts JPEG/PNG to WebP, then uploads with progress; resolves to the stored item or throws a readable error. */
+export async function uploadFile(original: File, onProgress: (pct: number) => void): Promise<MediaItem> {
+  const file = await toWebp(original);
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/admin/api/media");

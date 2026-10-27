@@ -77,7 +77,9 @@ test.describe("admin content workflow", () => {
     await page.getByRole("alertdialog").getByRole("button", { name: "Restore" }).click();
     await expect(page.getByText(/Revision restored/)).toBeVisible({ timeout: 30_000 });
 
-    // Validation error is shown inline.
+    // Validation error is shown inline. Reload first: the restore refreshes the form with
+    // the restored values, which would otherwise race the edit below.
+    await page.reload();
     await page.getByLabel("Title", { exact: true }).fill("");
     await page.getByRole("button", { name: "Publish" }).click();
     await expect(page.getByText("Title is required")).toBeVisible();

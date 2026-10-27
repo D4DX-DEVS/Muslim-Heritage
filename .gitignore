@@ -61,3 +61,6 @@ migration/data/download.log
 # local tooling
 .code-review-graph/
 migration/data/import-report.local.json
+
+# design inspector output (screenshots, reports)
+.taste-skill/

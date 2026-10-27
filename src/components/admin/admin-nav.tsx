@@ -56,7 +56,7 @@ function NavBody({ onNavigate, logoutAction }: { onNavigate?: () => void; logout
     <div className="flex h-full flex-col">
       <div className="px-4 py-5">
         <Link href="/admin" onClick={onNavigate}>
-          <Image src="/images/logo.png" alt="Kerala Muslim Heritage Foundation" width={372} height={89} className="h-9 w-auto" />
+          <Image src="/images/logo.webp" alt="Kerala Muslim Heritage Foundation" width={372} height={89} className="h-9 w-auto" />
         </Link>
       </div>
       <nav aria-label="Admin" className="flex-1 space-y-5 overflow-y-auto px-3 pb-4">

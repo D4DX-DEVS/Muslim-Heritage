@@ -238,11 +238,156 @@
     background-repeat: no-repeat;
     animation: var(--animate-shimmer);
   }
+  /* On dark grounds (the homepage banner). */
+  .skeleton-dark {
+    background-color: rgb(255 255 255 / 0.08);
+    background-image: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 0.12) 50%, transparent 100%);
+  }
 }
+
+/* ------------------------------------------------------------------
+   Motion. Scroll reveals are opt-in per element ([data-reveal], staggered
+   by --i) and only hide content once the observer has booted
+   (html.reveal-ready), so everything stays readable without JavaScript.
+   Transform and opacity only; the reduced-motion block above flattens it.
+   ------------------------------------------------------------------ */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(var(--rise, 32px)); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes diamond-in {
+  from { opacity: 0; transform: rotate(-135deg) scale(0.3); }
+  to { opacity: 1; transform: rotate(45deg); }
+}
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
+}
+@keyframes drift {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.1) translate(-1.5%, -1%); }
+}
+
+.reveal-ready [data-reveal]:not([data-shown]) {
+  opacity: 0;
+  transform: translateY(var(--rise, 28px));
+}
+[data-reveal] {
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 900ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+.anim-rise {
+  animation: rise-in 900ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 80ms);
+}
+.anim-diamond {
+  animation: diamond-in 900ms var(--ease-out) both;
+  animation-delay: 520ms;
+}
+.anim-float {
+  animation: float 5s ease-in-out infinite alternate;
+}
+.anim-drift {
+  animation: drift 22s ease-in-out infinite alternate;
+}
+
+/* Contents bars open in place: height eases where the browser can animate
+   to auto, and the panel's rows rise in either way. */
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }
+}
+.contents-bar::details-content {
+  block-size: 0;
+  overflow-y: clip;
+  transition:
+    block-size 450ms var(--ease-out),
+    content-visibility 450ms allow-discrete;
+}
+.contents-bar[open]::details-content {
+  block-size: auto;
+}
+.contents-bar[open] .contents-panel > * {
+  --rise: 10px;
+  animation: rise-in 500ms var(--ease-out) both;
+}
+.contents-bar[open] .contents-panel > :nth-child(2) { animation-delay: 60ms; }
 
 @media print {
   .no-print { display: none !important; }
   body { background: #fff; }
   .prose-heritage { font-size: 12pt; line-height: 1.7; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+}
+
+/* Homepage. The title's words rise in one after another; marquees loop a
+   duplicated track and stop under the pointer; mosaic photographs settle
+   from a slight zoom as their tile is revealed. */
+@keyframes word-rise {
+  from { opacity: 0; transform: translateY(0.45em) rotate(2deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes marquee {
+  to { transform: translateX(-100%); }
+}
+.hero-word {
+  animation: word-rise 900ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 110ms + 60ms);
+  transform-origin: left bottom;
+}
+.marquee-track {
+  animation: marquee 48s linear infinite;
+}
+.marquee-reverse .marquee-track {
+  animation-direction: reverse;
+  animation-duration: 64s;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+.mosaic-tile .mosaic-img {
+  transform: scale(1.14);
+}
+.mosaic-tile[data-shown] .mosaic-img,
+html:not(.reveal-ready) .mosaic-tile .mosaic-img {
+  transform: scale(1);
+}
+.mosaic-tile[data-shown] .group:hover .mosaic-img {
+  transform: scale(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee { flex-wrap: wrap; }
+  .marquee-track { animation: none; flex-wrap: wrap; }
+  .marquee-track[aria-hidden] { display: none; }
+  .mosaic-tile .mosaic-img { transform: none; }
+}
+
+/* Lines rise out of a mask, as if pushed up from behind their own baseline. */
+@keyframes line-mask {
+  from { transform: translateY(105%); }
+  to { transform: none; }
+}
+.line-mask {
+  overflow: clip;
+  overflow-clip-margin: 0.25em;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.line-mask-inner {
+  animation: line-mask 1100ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 140ms + 120ms);
+}
+.reveal-ready [data-reveal="mask"]:not([data-shown]) {
+  opacity: 1;
+  transform: translateY(0.6em);
+  clip-path: inset(0 0 100% 0);
+}
+[data-reveal="mask"] {
+  clip-path: inset(0 0 -0.3em 0);
+  transition:
+    clip-path 1000ms var(--ease-out),
+    transform 1000ms var(--ease-out);
 }

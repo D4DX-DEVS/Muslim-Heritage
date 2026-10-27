@@ -22,6 +22,7 @@ export function imageSize(b: Uint8Array, mime: UploadMime): { width: number | nu
   try {
     if (mime === "image/png") return { width: view.getUint32(16), height: view.getUint32(20) };
     if (mime === "image/gif") return { width: view.getUint16(6, true), height: view.getUint16(8, true) };
+    if (mime === "image/webp") return webpSize(b, view);
     if (mime === "image/jpeg") {
       let i = 2;
       while (i < b.length - 9) {
@@ -38,6 +39,21 @@ export function imageSize(b: Uint8Array, mime: UploadMime): { width: number | nu
     }
   } catch {
     // Truncated header: dimensions stay unknown.
+  }
+  return { width: null, height: null };
+}
+
+/** Dimensions from the first WebP chunk: lossy (VP8), lossless (VP8L) or extended (VP8X). */
+function webpSize(b: Uint8Array, view: DataView): { width: number | null; height: number | null } {
+  const chunk = String.fromCharCode(b[12], b[13], b[14], b[15]);
+  if (chunk === "VP8 ") return { width: view.getUint16(26, true) & 0x3fff, height: view.getUint16(28, true) & 0x3fff };
+  if (chunk === "VP8L") {
+    const bits = view.getUint32(21, true);
+    return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+  }
+  if (chunk === "VP8X") {
+    const u24 = (i: number) => b[i] | (b[i + 1] << 8) | (b[i + 2] << 16);
+    return { width: u24(24) + 1, height: u24(27) + 1 };
   }
   return { width: null, height: null };
 }

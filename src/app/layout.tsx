@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Anek_Malayalam, Inter, Noto_Sans_Malayalam, Poppins } from "next/font/google";
+import Script from "next/script";
 import { indexingAllowed, siteUrl } from "@/lib/env";
+import { REVEAL_BOOT_SCRIPT } from "@/lib/reveal";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -32,7 +34,13 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ml" className={`${inter.variable} ${poppins.variable} ${notoMl.variable} ${anekMl.variable}`}>
+    // The boot script adds a class to <html> before hydration, hence suppressHydrationWarning.
+    <html lang="ml" className={`${inter.variable} ${poppins.variable} ${notoMl.variable} ${anekMl.variable}`} suppressHydrationWarning>
+      <head>
+        <Script id="reveal-boot" strategy="beforeInteractive">
+          {REVEAL_BOOT_SCRIPT}
+        </Script>
+      </head>
       <body className="flex min-h-dvh flex-col">{children}</body>
     </html>
   );

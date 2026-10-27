@@ -43,7 +43,7 @@ export default async function ContactPage() {
             </li>
           </ul>
         </div>
-        <Image src="/images/hira.jpg" alt="Hira Centre, Kozhikode" width={460} height={439} className="w-full max-w-sm rounded-lg border border-border" />
+        <Image src="/images/hira.webp" alt="Hira Centre, Kozhikode" width={460} height={439} className="w-full max-w-sm rounded-lg border border-border" />
       </Container>
     </>
   );
