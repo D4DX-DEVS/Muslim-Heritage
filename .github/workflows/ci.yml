@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       deploy:
-        description: "Deploy to Cloudflare Workers after a green build"
+        description: "Deploy to Cloudflare Workers after a green build (pushes to main always deploy)"
         type: boolean
         default: false
 
@@ -28,11 +28,16 @@ jobs:
       # or Developer Mode on Windows).
       - run: npx opennextjs-cloudflare build
 
+  # Every green push to main deploys; a manual run deploys only when "deploy" is ticked.
   deploy:
     needs: verify
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.deploy)
     runs-on: ubuntu-latest
     environment: production
+    # One deploy at a time; a newer push waits rather than racing the one in progress.
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
