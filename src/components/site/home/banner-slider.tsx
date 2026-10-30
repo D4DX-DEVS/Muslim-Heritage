@@ -37,7 +37,7 @@ export function BannerSlider({ slides, className = "aspect-video sm:aspect-[13/4
           priority={i === 0}
           sizes="100vw"
           className={`object-cover transition-[opacity,transform] duration-[1400ms,7000ms] ease-out ${
-            i === index ? "scale-[1.06] opacity-100" : "scale-100 opacity-0"
+            i === index ? "scale-[1.02] opacity-100" : "scale-100 opacity-0"
           }`}
         />
       ))}

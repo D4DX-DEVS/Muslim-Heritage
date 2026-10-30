@@ -32,7 +32,7 @@ export function HomeContents({ sections }: { sections: ContentsSection[] }) {
             id="contents-heading"
             lang="ml"
             data-reveal="mask"
-            className="font-heading text-[clamp(3rem,8vw,7.5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-heritage-900 lg:col-span-7"
+            className="font-heading text-[clamp(1.75rem,3vw,2.75rem)] font-bold leading-[1.15] tracking-[-0.03em] text-heritage-900 lg:col-span-7"
           >
             ഉള്ളടക്കം
           </h2>
@@ -92,7 +92,7 @@ export function HomeContents({ sections }: { sections: ContentsSection[] }) {
               className="p-6 sm:p-10 lg:p-14"
             >
               <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                <h3 lang="ml" className="font-heading text-[clamp(1.5rem,2.6vw,2.25rem)] font-semibold leading-snug">
+                <h3 lang="ml" className="font-heading text-[clamp(1.25rem,1.9vw,1.625rem)] font-semibold leading-snug">
                   {current.title}
                 </h3>
                 <Link

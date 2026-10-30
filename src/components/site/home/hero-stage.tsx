@@ -9,34 +9,24 @@ interface HeroStageProps {
 }
 
 /**
- * A first screen with the photographs behind it (above it on phones). As the page scrolls the photographs sink and
- * zoom slowly while the words drift up and fade, so the next section slides over a moving picture.
+ * The photographs as a clear band across the top with the words beneath them, so nothing is laid over the pictures.
+ * As the page scrolls the words drift up and fade.
  */
 export function HeroStage({ backdrop, children }: HeroStageProps) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const photoY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const photoScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
-    <section
-      ref={ref}
-      aria-labelledby="home-title"
-      className="relative isolate flex flex-col overflow-hidden bg-heritage-950 lg:min-h-[calc(100svh-4.5rem)] lg:justify-end"
-    >
-      {/* Phones and tablets: the panorama is its own band above the words, so it isn't cropped to a sliver.
-          Desktop: it fills the whole first screen behind them. */}
-      <motion.div
-        style={reduce ? undefined : { y: photoY, scale: photoScale }}
-        className="relative aspect-[16/10] w-full origin-top sm:aspect-[16/8] lg:absolute lg:inset-0 lg:-z-10 lg:aspect-auto"
-      >
+    <section ref={ref} aria-labelledby="home-title" className="relative isolate flex flex-col overflow-hidden bg-heritage-950">
+      {/* The banners are 13:4 panoramas: shown whole from tablets up, a little taller (sides cropped) on phones. */}
+      {/* A strip of the stage colour keeps the photographs clear of the sticky header's lower edge. */}
+      <div className="relative mt-4 aspect-[2/1] w-full sm:mt-6 sm:aspect-[13/4] lg:mt-8">
         {backdrop}
-      </motion.div>
-      <div aria-hidden="true" className="absolute inset-0 -z-10 hidden bg-gradient-to-t from-heritage-950 via-heritage-950/75 to-heritage-950/45 lg:block" />
-      <motion.div style={reduce ? undefined : { y: textY, opacity: textOpacity }} className="relative w-full bg-heritage-950 lg:bg-transparent">
+      </div>
+      <motion.div style={reduce ? undefined : { y: textY, opacity: textOpacity }} className="relative w-full">
         {children}
       </motion.div>
     </section>

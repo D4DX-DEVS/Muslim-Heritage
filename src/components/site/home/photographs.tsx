@@ -23,7 +23,7 @@ export function HomePhotographs({ photos, total, first = 1 }: { photos: MediaRef
     <section aria-labelledby="photos-heading" className="bg-paper py-16 sm:py-20 lg:py-24">
       <Container>
         <div className="mb-10 grid grid-cols-1 gap-5 lg:mb-12 lg:grid-cols-12 lg:items-end">
-          <h2 id="photos-heading" data-reveal="mask" className="font-heading text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-heritage-900 lg:col-span-7">
+          <h2 id="photos-heading" data-reveal="mask" className="font-heading text-[clamp(1.75rem,3vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.03em] text-heritage-900 lg:col-span-7">
             Three days in Kozhikode
           </h2>
           <div data-reveal style={{ "--i": 1 } as React.CSSProperties} className="lg:col-span-5">

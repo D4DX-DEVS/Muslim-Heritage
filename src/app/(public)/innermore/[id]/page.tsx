@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Clock, ListTree } from "lucide-react";
+import { ArrowLeft, ArrowRight, ListTree } from "lucide-react";
 import { ArticleCard } from "@/components/site/article-card";
 import { ReadingProgress, ShareBar } from "@/components/site/article-tools";
 import { AuthorAvatar } from "@/components/site/author-card";
@@ -111,9 +111,6 @@ export default async function ArticlePage({ params, searchParams }: PageProps<"/
                       </span>
                     </Link>
                   ))}
-                  <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <Clock className="size-4" aria-hidden="true" /> {article.readingMinutes} min read
-                  </span>
                 </div>
                 <ShareBar url={canonical} title={article.title} />
               </div>

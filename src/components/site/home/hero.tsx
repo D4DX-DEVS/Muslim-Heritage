@@ -17,7 +17,7 @@ interface HomeHeroProps {
 const stagger = (i: number) => ({ "--i": i }) as React.CSSProperties;
 
 /**
- * The conference panorama fills the first screen; the title rises out of a mask over it,
+ * The conference panoramas across the top, kept clear of any text; beneath them the title rises out of a mask,
  * with the dates, the way into the volume and the volume's figures along the foot.
  */
 export function HomeHero({ title, subtitle, stats, slides }: HomeHeroProps) {
@@ -37,8 +37,8 @@ export function HomeHero({ title, subtitle, stats, slides }: HomeHeroProps) {
         slides.length > 0 ? <BannerSlider slides={slides} className="h-full" /> : <div className="h-full bg-heritage-900" />
       }
     >
-      <Container className="w-full pb-8 pt-8 sm:pb-10 sm:pt-10 lg:pb-12 lg:pt-32">
-        <h1 id="home-title" lang="ml" className="font-heading text-[clamp(2.25rem,6.4vw,6.25rem)] font-bold leading-[1.12] tracking-[-0.02em] text-white">
+      <Container className="w-full py-8 sm:py-10 lg:py-12">
+        <h1 id="home-title" lang="ml" className="font-heading text-[clamp(1.75rem,3.6vw,3.5rem)] font-bold leading-[1.2] tracking-[-0.02em] text-white">
           {lines.map((line, i) => (
             <span key={i} className="line-mask block lg:whitespace-nowrap">
               <span className="line-mask-inner block" style={stagger(i)}>
@@ -48,9 +48,9 @@ export function HomeHero({ title, subtitle, stats, slides }: HomeHeroProps) {
           ))}
         </h1>
 
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:mt-10 lg:grid-cols-12 lg:items-end lg:gap-12">
+        <div className="mt-5 grid grid-cols-1 gap-6 lg:mt-6 lg:grid-cols-12 lg:items-end lg:gap-12">
           <div className="lg:col-span-7">
-            <p lang="ml" className="anim-rise font-heading text-[clamp(1.25rem,2vw,1.75rem)] font-semibold text-gold-200" style={stagger(3)}>
+            <p lang="ml" className="anim-rise font-heading text-[clamp(1.0625rem,1.5vw,1.375rem)] font-semibold text-gold-200" style={stagger(3)}>
               {subtitle} · 2013 ഡിസംബര്‍ 22–24 · കോഴിക്കോട്
             </p>
             <p className="anim-rise mt-4 max-w-xl text-[1.0625rem] leading-relaxed text-white" style={stagger(4)}>
@@ -70,11 +70,11 @@ export function HomeHero({ title, subtitle, stats, slides }: HomeHeroProps) {
           </div>
         </div>
 
-        <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-5 bg-heritage-950/70 p-5 sm:grid-cols-4 sm:p-6 lg:mt-14">
+        <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-white/15 pt-6 sm:grid-cols-4 lg:mt-10">
           {figures.map((f, i) => (
             <div key={f.label} className="anim-rise" style={stagger(6 + i)}>
               <dt className="sr-only">{f.label}</dt>
-              <dd className="font-heading text-[clamp(1.75rem,3vw,2.75rem)] font-bold leading-none text-white">
+              <dd className="font-heading text-[clamp(1.5rem,2.4vw,2.25rem)] font-bold leading-none text-white">
                 <CountUp value={f.value} />
               </dd>
               <dd className="mt-2 text-sm text-white/85">{f.label}</dd>

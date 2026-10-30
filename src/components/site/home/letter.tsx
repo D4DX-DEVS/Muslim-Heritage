@@ -14,7 +14,7 @@ export function HomeLetter({ bodyHtml }: { bodyHtml: string }) {
           id="about-heading"
           lang="ml"
           data-reveal="mask"
-          className="font-heading text-[clamp(2.25rem,4.4vw,4rem)] font-bold leading-[1.15] tracking-[-0.02em] lg:col-span-6"
+          className="font-heading text-[clamp(1.625rem,2.8vw,2.5rem)] font-bold leading-[1.2] tracking-[-0.02em] lg:col-span-6"
         >
           {SITE.nameMl}
         </h2>

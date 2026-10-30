@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
     },
   },
   poweredByHeader: false,
+  experimental: {
+    // Pages are rendered per request, so by default the client router refetches one every time it is
+    // opened. Keep a visited page in the client cache for 5 minutes so going back to it is instant.
+    // Admin saves call router.refresh(), which clears this cache for the editor.
+    staleTimes: { dynamic: 300 },
+  },
   // Legacy media are small JPEGs served from R2 at their original size; enabling
   // optimisation would require the Cloudflare Images binding.
   images: { unoptimized: true },

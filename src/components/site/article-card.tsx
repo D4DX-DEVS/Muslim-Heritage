@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Clock } from "lucide-react";
 import type { ArticleCard as ArticleCardData } from "@/lib/queries/public";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -31,7 +30,7 @@ export function ArticleCard({ article, variant = "card", showSection = true, pri
               {article.title}
             </Link>
           </h3>
-          <Meta authorNames={authorNames} minutes={article.readingMinutes} />
+          <Meta authorNames={authorNames} />
         </div>
       </article>
     );
@@ -62,7 +61,7 @@ export function ArticleCard({ article, variant = "card", showSection = true, pri
         </h3>
         {article.summary && <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-ink-soft">{article.summary}</p>}
         <div className="mt-auto pt-4">
-          <Meta authorNames={authorNames} minutes={article.readingMinutes} />
+          <Meta authorNames={authorNames} />
         </div>
       </div>
     </article>
@@ -80,16 +79,9 @@ function SectionLabel({ section }: { section: { id: number; title: string } }) {
   );
 }
 
-function Meta({ authorNames, minutes }: { authorNames: string; minutes: number }) {
-  return (
-    <p className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:text-sm">
-      {authorNames && <span className="font-medium text-ink-soft">{authorNames}</span>}
-      <span className="inline-flex items-center gap-1">
-        <Clock className="size-3.5" aria-hidden="true" />
-        {minutes} min read
-      </span>
-    </p>
-  );
+function Meta({ authorNames }: { authorNames: string }) {
+  if (!authorNames) return null;
+  return <p className="mt-1.5 text-xs font-medium text-ink-soft sm:text-sm">{authorNames}</p>;
 }
 
 export function ArticleCardSkeleton({ variant = "card" }: { variant?: "card" | "row" }) {
