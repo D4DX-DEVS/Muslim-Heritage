@@ -40,7 +40,7 @@ If `migration/media/` is missing, run `npm run migrate:media` first (downloads f
 | Name | Where | Purpose |
 |---|---|---|
 | `DB`, `MEDIA` | `wrangler.jsonc` bindings | D1 `islam-heritage`, R2 `islam-heritage` |
-| `SITE_URL` | `wrangler.jsonc` vars | Canonical origin (`https://www.muslimheritage.in`) |
+| `SITE_URL` | `wrangler.jsonc` vars | Canonical origin (`https://muslimheritage.in`) |
 | `ALLOW_INDEXING` | vars | `"true"` only on production; otherwise robots.txt disallows all and pages send `noindex` |
 | `MEDIA_BASE_URL` | vars | Public R2 origin for direct CDN URLs; empty = served by `/uploads/...` |
 | `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `SESSION_SECRET` | `.dev.vars` locally; `wrangler secret put NAME` in production | Admin sign-in |
@@ -95,5 +95,5 @@ npm run migrate:import:remote        # remote (reads .env); add -- --force to ov
 - [ ] Media custom domain + `MEDIA_BASE_URL` (optional but recommended)
 - [ ] Spot-check 20 migrated articles against the legacy site; fix `/innermore/7` author if known
 - [ ] Add alt text to key images in Admin → Media
-- [ ] Custom domain `www.muslimheritage.in` → Worker; `ALLOW_INDEXING = "true"`; submit `/sitemap.xml` to Search Console
+- [ ] Custom domain `muslimheritage.in` (www 301s to apex) → Worker; `ALLOW_INDEXING = "true"`; submit `/sitemap.xml` to Search Console
 - [ ] Take a D1 export right after launch

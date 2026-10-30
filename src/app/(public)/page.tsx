@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { HomeContents } from "@/components/site/home/contents";
 import { HomeHero } from "@/components/site/home/hero";
 import { HomeLetter } from "@/components/site/home/letter";
@@ -5,9 +6,15 @@ import { HomePhotographs } from "@/components/site/home/photographs";
 import { HomeReading } from "@/components/site/home/reading";
 import { StackSection } from "@/components/site/home/stack-section";
 import { JsonLd } from "@/components/site/json-ld";
-import { siteUrl } from "@/lib/env";
+import { organizationLd, websiteLd } from "@/lib/seo";
 import { archiveStats, contentsBySection, featuredArticles, getConference, getPage } from "@/lib/queries/public";
 import { SITE } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: { absolute: `${SITE.name} — Kerala Muslim History Conference Proceedings` },
+  description: SITE.description,
+  alternates: { canonical: "/" },
+};
 
 // The homepage: the conference panorama holds as the first screen while the rest of the page slides up
 // over it: where to begin, the contents index, the photographs, the foundation's close.
@@ -19,24 +26,12 @@ export default async function HomePage() {
     getConference(SITE.conferenceId),
     getPage("about"),
   ]);
-  const url = siteUrl();
   const slides = conference?.slides ?? [];
   const gallery = conference?.gallery ?? [];
 
   return (
     <>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: SITE.name,
-          url,
-          logo: `${url}/images/logo.png`,
-          email: SITE.email,
-          address: { "@type": "PostalAddress", streetAddress: "Hira Centre, PB.833", addressLocality: "Kozhikode", addressRegion: "Kerala", addressCountry: "IN" },
-          sameAs: [SITE.facebook],
-        }}
-      />
+      <JsonLd data={{ "@context": "https://schema.org", "@graph": [organizationLd(), websiteLd()] }} />
 
       <StackSection depth={1}>
         <HomeHero

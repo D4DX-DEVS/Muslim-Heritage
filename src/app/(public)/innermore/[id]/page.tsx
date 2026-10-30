@@ -14,7 +14,7 @@ import { siteUrl } from "@/lib/env";
 import { withMediaBase } from "@/lib/media-url";
 import { parseId } from "@/lib/params";
 import { getArticle } from "@/lib/queries/public";
-import { SITE } from "@/lib/site";
+import { absoluteUrl, organizationLd, proceedingsLd } from "@/lib/seo";
 
 async function load(idParam: string, preview: boolean) {
   const id = parseId(idParam);
@@ -62,14 +62,18 @@ export default async function ArticlePage({ params, searchParams }: PageProps<"/
         data={{
           "@context": "https://schema.org",
           "@type": "ScholarlyArticle",
+          "@id": `${canonical}#article`,
           headline: article.title,
           inLanguage: "ml",
           url: canonical,
-          description: article.summary,
-          image: leadImage ? `${url}${leadImage.url}` : undefined,
-          author: authors.map((a) => ({ "@type": "Person", name: a.name, url: `${url}/author/${a.id}` })),
-          isPartOf: { "@type": "Book", name: "കേരള മുസ്‌ലിം ഹിസ്റ്ററി കോണ്‍ഫറന്‍സ് പ്രബന്ധസമാഹാരം" },
-          publisher: { "@type": "Organization", name: SITE.name, logo: { "@type": "ImageObject", url: `${url}/images/logo.png` } },
+          mainEntityOfPage: canonical,
+          description: article.seoDescription || article.summary || undefined,
+          image: leadImage ? absoluteUrl(leadImage.url) : undefined,
+          author: authors.map((a) => ({ "@type": "Person", name: a.name, url: `${url}/author/${a.id}`, jobTitle: a.designation || undefined })),
+          articleSection: section?.title,
+          isPartOf: proceedingsLd(),
+          publisher: organizationLd(),
+          datePublished: article.publishedAt ?? undefined,
           dateModified: article.updatedAt,
         }}
       />

@@ -11,9 +11,9 @@
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "muslim-heritage" }],
   "observability": { "enabled": true },
   "vars": {
-    "SITE_URL": "https://www.muslimheritage.in",
+    "SITE_URL": "https://muslimheritage.in",
     // "true" only on the production deployment; anything else sends noindex.
-    "ALLOW_INDEXING": "false",
+    "ALLOW_INDEXING": "true",
     // Public CDN origin of the R2 bucket (custom domain such as https://media.muslimheritage.in).
     // Empty = media is served by this Worker at /uploads/... and cached at the edge.
     "MEDIA_BASE_URL": ""

@@ -5,8 +5,8 @@ interface __BaseEnv_CloudflareEnv {
 	MEDIA: R2Bucket;
 	DB: D1Database;
 	ASSETS: Fetcher;
-	SITE_URL: "https://www.muslimheritage.in";
-	ALLOW_INDEXING: "false";
+	SITE_URL: "https://muslimheritage.in";
+	ALLOW_INDEXING: "true";
 	MEDIA_BASE_URL: "";
 	ADMIN_USERNAME: string;
 	ADMIN_PASSWORD_HASH: string;

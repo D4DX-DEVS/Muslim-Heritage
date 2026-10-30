@@ -4,11 +4,14 @@ import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard, ArticleGrid } from "@/components/site/article-card";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
+import { JsonLd } from "@/components/site/json-ld";
 import { Container, PageHeader } from "@/components/site/page-header";
 import { PhotoGallery } from "@/components/site/photo-gallery";
 import { siteUrl } from "@/lib/env";
 import { parseId } from "@/lib/params";
 import { featuredArticles, getConference, listSections } from "@/lib/queries/public";
+import { organizationLd, proceedingsLd } from "@/lib/seo";
+import { SITE } from "@/lib/site";
 
 export async function generateMetadata({ params }: PageProps<"/confindex/[id]">): Promise<Metadata> {
   const id = parseId((await params).id);
@@ -29,6 +32,9 @@ export default async function ConferencePage({ params }: PageProps<"/confindex/[
 
   return (
     <>
+      {conf.id === SITE.conferenceId && (
+        <JsonLd data={{ "@context": "https://schema.org", "@graph": [proceedingsLd(), organizationLd()] }} />
+      )}
       <PageHeader
         eyebrow="Kerala Muslim History Conference · 22–24 December 2013 · Kozhikode"
         title={`${conf.title} — ${conf.subtitle}`}

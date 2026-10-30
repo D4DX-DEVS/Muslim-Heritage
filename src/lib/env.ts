@@ -17,7 +17,7 @@ export function getEnv(): AppEnv {
 }
 
 export function siteUrl(): string {
-  const url = getEnv().SITE_URL || process.env.SITE_URL || "https://www.muslimheritage.in";
+  const url = getEnv().SITE_URL || process.env.SITE_URL || "https://muslimheritage.in";
   return url.replace(/\/$/, "");
 }
 

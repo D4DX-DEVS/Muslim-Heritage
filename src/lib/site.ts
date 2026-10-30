@@ -10,6 +10,15 @@ export const SITE = {
   email: "heritagestudy13@gmail.com",
   facebook: "https://www.facebook.com/muslimheritage.in",
   conferenceId: 1,
+  // The 2013 conference whose proceedings this site publishes (structured data, llms.txt).
+  conference: {
+    name: "Kerala Muslim History Conference",
+    startDate: "2013-12-22",
+    endDate: "2013-12-24",
+    venue: "JDT Islam Campus",
+    locality: "Kozhikode",
+  },
+  proceedingsTitle: "കേരള മുസ്‌ലിം ഹിസ്റ്ററി കോണ്‍ഫറന്‍സ് പ്രബന്ധസമാഹാരം",
 } as const;
 
 export const NAV = [

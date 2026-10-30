@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/shared/states";
 import { siteUrl } from "@/lib/env";
 import { parseId } from "@/lib/params";
 import { getAuthor } from "@/lib/queries/public";
+import { absoluteUrl } from "@/lib/seo";
 
 async function load(idParam: string) {
   const id = parseId(idParam);
@@ -42,7 +43,8 @@ export default async function AuthorPage({ params }: PageProps<"/author/[id]">) 
           name: author.name,
           jobTitle: author.designation || undefined,
           url: `${url}/author/${author.id}`,
-          image: author.photo ? `${url}${author.photo.url}` : undefined,
+          image: author.photo ? absoluteUrl(author.photo.url) : undefined,
+          description: author.bio || undefined,
         }}
       />
       <div className="border-b border-border bg-paper">
